@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: backendtask
+  datasource:
+    url: jdbc:postgresql://localhost:5432/seriousdb
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate   # NEVER create/update with Hibernate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+server:
+  port: 10030
