@@ -1,8 +1,11 @@
 package com.seriousemployee.backendtask.controllers;
 
-import com.seriousemployee.backendtask.dto.EmployeeDTO;
+import com.seriousemployee.backendtask.dto.EmployeeRequest;
 import com.seriousemployee.backendtask.entities.Employee;
 import com.seriousemployee.backendtask.services.EmployeeService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +20,32 @@ public class EmployeeController {
     }
 
     @PostMapping("/newEmployee")
-    public Employee createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        return service.createEmployee(employeeDTO.name(), employeeDTO.email(), employeeDTO.password(), employeeDTO.role());
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = service.createEmployee(employeeRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
     }
 
     @PutMapping("/updateEmployee/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
-        return service.updateEmployee(id, employeeDTO.name(), employeeDTO.email(), employeeDTO.password(), employeeDTO.role());
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = service.updateEmployee(id, employeeRequest);
+        return ResponseEntity.ok(employee);
     }
 
     @DeleteMapping("/deleteEmployee/{id}")
-    public void deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         service.deleteEmployee(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/getEmployee/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
-        return service.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        Employee employee = service.getEmployeeById(id);
+        return ResponseEntity.ok(employee);
     }
 
     @GetMapping("/getAllEmployees")
-    public List<Employee> getAllEmployees() {
-        return service.getAllEmployees();
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employees = service.getAllEmployees();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
