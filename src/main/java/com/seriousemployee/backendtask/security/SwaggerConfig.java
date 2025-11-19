@@ -54,10 +54,7 @@ public class SwaggerConfig {
                         .contact(new Contact()
                                 .name("API Support")
                                 .url("https://github.com/HolbieEnjoyer/Springboot-backend-task")))
-                .servers(List.of(
-                        new Server().url("http://localhost:10030").description("Local Development"),
-                        new Server().url("https://your-production-url.com").description("Production")
-                ))
+                .servers(List.of())
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components()
                         .addSecuritySchemes("Bearer Authentication", new SecurityScheme()
