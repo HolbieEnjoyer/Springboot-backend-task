@@ -9,7 +9,7 @@ spring:
   application:
     name: backendtask
   datasource:
-    url: jdbc:postgresql://db:5432/seriousdb
+    url: ${SPRING_DATASOURCE_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
 

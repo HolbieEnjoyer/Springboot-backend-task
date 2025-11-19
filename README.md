@@ -1,5 +1,6 @@
 # Simple Employee API in Spring Boot
 
+[![Build and Push Docker Image](https://github.com/HolbieEnjoyer/Springboot-backend-task/actions/workflows/docker.yml/badge.svg)](https://github.com/HolbieEnjoyer/Springboot-backend-task/actions/workflows/docker.yml)
 ## Overview
 1. [About](#about)
 2. [Technologies Used](#technologies-used)
