@@ -5,6 +5,9 @@ import com.seriousemployee.backendtask.entities.Employee;
 import com.seriousemployee.backendtask.exception.ResourceNotFoundException;
 import com.seriousemployee.backendtask.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,10 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees() {
         return repo.findAll();
+    }
+
+    public Page<Employee> findAllEmployees(Specification<Employee> spec, Pageable pageable) {
+        return repo.findAll(spec, pageable);
     }
 
     public Employee updateEmployee(Long id, RegisterEmployeeRequest employeeRequest, boolean promotion) {
