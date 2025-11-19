@@ -1,9 +1,9 @@
-package com.seriousemployee.backendtask.exception;
+package com.seriousemployee.backendtask.dto;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-class ErrorResponse {
+public class ErrorResponse {
     private int status;
     private String message;
     private LocalDateTime timestamp;

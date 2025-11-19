@@ -1,4 +1,9 @@
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
   main:
     banner-mode: "off"
   application:
@@ -23,3 +28,13 @@ server:
   port: 10030
   error:
     include-stacktrace: never
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration: 3600000  # 1 hour
+
+serious-app:
+  superadmin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}

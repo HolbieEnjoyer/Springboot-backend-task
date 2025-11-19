@@ -1,9 +1,11 @@
 package com.seriousemployee.backendtask.services;
 
-import com.seriousemployee.backendtask.dto.EmployeeRequest;
+import com.seriousemployee.backendtask.dto.RegisterEmployeeRequest;
 import com.seriousemployee.backendtask.entities.Employee;
 import com.seriousemployee.backendtask.exception.ResourceNotFoundException;
 import com.seriousemployee.backendtask.repositories.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +13,9 @@ import java.util.List;
 @Service
 public class EmployeeService {
     private final EmployeeRepository repo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public EmployeeService(EmployeeRepository repo) {
         this.repo = repo;
@@ -20,17 +25,21 @@ public class EmployeeService {
         return repo.findAll();
     }
 
-    public Employee createEmployee(EmployeeRequest employeeRequest) {
-        return repo.save(new Employee(employeeRequest.name(), employeeRequest.email(), employeeRequest.password(), employeeRequest.role()));
-    }
-
-    public Employee updateEmployee(Long id, EmployeeRequest employeeRequest) {
+    public Employee updateEmployee(Long id, RegisterEmployeeRequest employeeRequest, boolean promotion) {
         Employee employee = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
         if (employee != null) {
-            employee.setName(employeeRequest.name());
-            employee.setEmail(employeeRequest.email());
-            employee.setPassword(employeeRequest.password());
-            employee.setRole(employeeRequest.role());
+            if (employeeRequest != null) {
+                String encodedPassword = passwordEncoder.encode(employeeRequest.password());
+                employee.setName(employeeRequest.name());
+                employee.setEmail(employeeRequest.email());
+                employee.setPassword(encodedPassword);
+            }
+            else {
+                if (!employee.getRole().equals("SUPERADMIN")) {
+                    employee.setRole(promotion ? "ADMIN" : "USER");
+                }
+            }
+
             return repo.save(employee);
         }
         return null;
@@ -40,7 +49,15 @@ public class EmployeeService {
         return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
+    public Employee getEmployeeByEmail(String email) {
+        return repo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Employee not found with email: " + email));
+    }
+
     public void deleteEmployee(Long id) {
         repo.deleteById(id);
+    }
+
+    public void deleteEmployee(Employee employee) {
+        repo.delete(employee);
     }
 }
